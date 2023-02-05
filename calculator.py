@@ -1,10 +1,37 @@
 from tkinter import *
 
+expression = ""
+
+def press_button(button):
+    if button == "=":
+        compute()
+        return 
+    
+    global expression
+    expression += str(button)
+    equation.set(expression)
+
+def compute():
+    try:
+        global expression
+        total = str(eval(expression))
+
+        equation.set(total)
+        expression = total
+    except:
+        equation.set("error")
+        expression = ""
+
+def erase():
+    global expression
+    expression = ""
+    equation.set("")
+
+
 # Noir : #101419
 # Bleu : #476C9B
 # Rouge : #984447
 
-# if __name__ == "main":
 gui = Tk()
 
 gui.title("Calculatrice")
@@ -25,7 +52,7 @@ calculator_column = 0
 for button in buttons:
         newButton = Label(gui, text=str(button), bg="#476C9B", fg="#FFF", height=4, width=6)
 
-        newButton.bind("<Button-1>", print)
+        newButton.bind("<Button-1>", lambda e, button=button: press_button(button))
         newButton.grid(row=calculator_row, column=calculator_column)
 
         calculator_column += 1
@@ -34,7 +61,7 @@ for button in buttons:
             calculator_row += 1
 
 newButton = Label(gui, text="Effacer", bg="#984447", fg="#FFF", height=4, width=26)
-newButton.bind("<Button-1>", print)
+newButton.bind("<Button-1>", lambda e: erase())
 newButton.grid(columnspan=4)
 
 gui.mainloop()
